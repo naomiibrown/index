@@ -1,0 +1,325 @@
+public/css/ styles.css
+/* Simple but presentable styling for exam */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Header with color */
+header {
+  background: #2c3e50; /* Dark blue */
+  color: white;
+  padding: 1.2rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  display: inline-block;
+}
+
+/* Navigation */
+nav {
+  display: inline-block;
+  float: right;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  display: inline-block;
+  margin-left: 1.5rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 0;
+  transition: all 0.3s;
+}
+
+nav a:hover {
+  color: #f1c40f; /* Yellow */
+}
+
+/* Hero section with color */
+.hero {
+  background: #3498db; /* Blue */
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.hero h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Button styling */
+.btn {
+  display: inline-block;
+  background: #e74c3c; /* Red */
+  color: white;
+  padding: 0.8rem 1.8rem;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background: #c0392b; /* Darker red */
+  transform: translateY(-2px);
+}
+
+/* Menu items */
+.menu-section {
+  padding: 2rem 0;
+}
+
+.menu-category {
+  margin-bottom: 2rem;
+}
+
+.menu-category h3 {
+  color: #2c3e50; /* Dark blue */
+  border-bottom: 2px solid #f1c40f; /* Yellow */
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.menu-item {
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed #ddd;
+}
+
+.item-name {
+  font-weight: bold;
+  color: #2c3e50; /* Dark blue */
+}
+
+.item-price {
+  float: right;
+  color: #e74c3c; /* Red */
+  font-weight: bold;
+}
+
+.item-desc {
+  color: #7f8c8d; /* Gray */
+  font-size: 0.95rem;
+}
+
+/* Footer with color */
+footer {
+  background: #2c3e50; /* Dark blue */
+  color: white;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+
+
+
+public/index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Delight | Fine Dining</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Gourmet Delight</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/menu.html">Menu</a></li>
+                    <li><a href="/gallery.html">Gallery</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Premium Dining Experience</h2>
+            <p>Where every dish tells a story of passion and flavor</p>
+            <a href="/menu.html" class="btn">Explore Our Menu</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Gourmet Delight. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+
+public/menu.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu | Gourmet Delight</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Gourmet Delight</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/menu.html">Menu</a></li>
+                    <li><a href="/gallery.html">Gallery</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container menu-section">
+        <h2>Our Menu</h2>
+
+        <div class="menu-category">
+            <h3>Appetizers</h3>
+            <div class="menu-item">
+                <span class="item-name">Bruschetta</span>
+                <span class="item-price">$8.50</span>
+                <p class="item-desc">Toasted bread with fresh tomatoes, garlic and basil</p>
+            </div>
+            <div class="menu-item">
+                <span class="item-name">Calamari</span>
+                <span class="item-price">$12.00</span>
+                <p class="item-desc">Crispy fried squid with lemon aioli</p>
+            </div>
+        </div>
+
+        <div class="menu-category">
+            <h3>Main Courses</h3>
+            <div class="menu-item">
+                <span class="item-name">Filet Mignon</span>
+                <span class="item-price">$32.00</span>
+                <p class="item-desc">8oz premium cut with roasted vegetables</p>
+            </div>
+            <div class="menu-item">
+                <span class="item-name">Salmon Teriyaki</span>
+                <span class="item-price">$24.50</span>
+                <p class="item-desc">Fresh salmon with homemade teriyaki glaze</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Gourmet Delight. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+
+
+public/about.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Gourmet Delight</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Gourmet Delight</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/menu.html">Menu</a></li>
+                    <li><a href="/gallery.html">Gallery</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="about-section">
+            <div class="container">
+                <h2>Our Story</h2>
+                <p>Founded in 2010, Gourmet Delight has been serving exceptional cuisine to our valued guests. Our chef
+                    brings 20 years of international experience to create dishes that blend traditional techniques with
+                    modern innovation.</p>
+
+                <h3>Our Philosophy</h3>
+                <p>We believe in using only the freshest, locally-sourced ingredients to create memorable dining
+                    experiences. Every dish tells a story of passion and dedication to culinary excellence.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Gourmet Delight. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
+
+
+
+script.js
+// Simple JavaScript for interactive elements
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("Website loaded successfully");
+
+  // You can add more interactive features here
+  // For example:
+  const navLinks = document.querySelectorAll("nav a");
+  navLinks.forEach((link) => {
+    link.addEventListener("mouseover", function () {
+      this.style.color = "#ff6b6b";
+    });
+    link.addEventListener("mouseout", function () {
+      this.style.color = "#fff";
+    });
+  });
+});

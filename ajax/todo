@@ -1,0 +1,124 @@
+script.js 
+const displayTasks = () => {
+    document.getElementById("task-list").innerHTML = "";
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8000/tasks", true);
+    xhr.onload = function () {
+      if (this.status === 200) {
+        const tasks = JSON.parse(this.responseText);
+        tasks.forEach((element, index) => {
+          let li = document.createElement("li");
+          li.innerHTML = `
+            <span id="task-${index}">${element}</span>
+            <button onclick="deleteTask(${index})">Delete</button>
+            <button onclick="editTask(${index})">Edit</button>
+          `;
+          document.getElementById("task-list").append(li);
+        });
+      } else console.log("error");
+    };
+    xhr.send();
+  };
+  
+  const addTasks = () => {
+    const task = document.getElementById("task-input").value;
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8000/tasks", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (this.status === 201) {
+        document.getElementById("task-input").value = "";
+        displayTasks();
+      } else console.log("error");
+    };
+    xhr.send(JSON.stringify({ task }));
+  };
+  
+  const deleteTask = (index) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8000/tasks/delete", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (this.status === 200) {
+        displayTasks();
+      } else console.log("error");
+    };
+    xhr.send(JSON.stringify({ index }));
+  };
+  
+  const editTask = (index) => {
+    const currentText = document.getElementById(`task-${index}`).innerText;
+    const newTask = prompt("Edit the task:", currentText);
+    if (newTask !== null && newTask.trim() !== "") {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:8000/tasks/update", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = function () {
+        if (this.status === 200) {
+          displayTasks();
+        } else console.log("error");
+      };
+      xhr.send(JSON.stringify({ index, task: newTask.trim() }));
+    }
+  };
+  
+  window.onload = displayTasks;
+  
+  index.html 
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List</title>
+</head>
+<body>
+  <h2>To-Do List</h2>
+  <input type="text" id="task-input" placeholder="Enter a task" />
+  <button id="add-task" onclick="addTasks()">Add</button>
+  <ul id="task-list"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+server.js 
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+let tasks = [];
+
+app.use(express.static('.'));
+app.use(express.json());
+app.use(cors());
+
+app.listen(8000, () => console.log("http://localhost:8000"));
+
+app.get('/tasks', (req, res) => {
+  return res.status(200).json(tasks);
+});
+
+app.post('/tasks', (req, res) => {
+  if (!req.body.task) return res.status(400).send("No task specified");
+  tasks.push(req.body.task);
+  return res.status(201).json(tasks);
+});
+
+app.post('/tasks/delete', (req, res) => {
+  if (typeof tasks[req.body.index] === 'undefined') {
+    return res.status(404).send("Task not found");
+  }
+  tasks.splice(req.body.index, 1);
+  return res.status(200).send("Task deleted successfully!");
+});
+
+app.post('/tasks/update', (req, res) => {
+  const { index, task } = req.body;
+  if (typeof tasks[index] === 'undefined') {
+    return res.status(404).send("Task not found");
+  }
+  tasks[index] = task;
+  return res.status(200).send("Task updated successfully!");
+});

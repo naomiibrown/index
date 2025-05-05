@@ -1,0 +1,173 @@
+index.html 
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Product Catalog</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="catalog">
+        <h1>Product Catalog</h1>
+        <div id="products"></div>
+        <div class="pagination">
+            <button id="prev">Previous</button>
+            <span id="page">Page 1</span>
+            <button id="next">Next</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+
+styles.css 
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .catalog {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .product {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+  }
+  
+  .product img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+  
+  .product-info {
+    flex-grow: 1;
+  }
+  
+  .price {
+    font-weight: bold;
+    color: #2a6496;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  button {
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+
+  
+  script.js 
+  const products = [
+  {
+    name: "Headphones",
+    price: 7999,
+    desc: "Noise-cancelling",
+    img: "https://m.media-amazon.com/images/I/61+Q6Rh+5mL._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "Smartwatch",
+    price: 12999,
+    desc: "Fitness tracking",
+    img: "https://m.media-amazon.com/images/I/71Swqqe7XAL._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "Mouse",
+    price: 2499,
+    desc: "Ergonomic",
+    img: "https://m.media-amazon.com/images/I/61Hjq+9WkAL._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "Laptop Stand",
+    price: 1999,
+    desc: "Adjustable",
+    img: "https://m.media-amazon.com/images/I/61S6YkqZQWL._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "Speaker",
+    price: 3499,
+    desc: "Portable",
+    img: "https://m.media-amazon.com/images/I/71yZAYZ5WVL._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "USB Cable",
+    price: 499,
+    desc: "Fast charging",
+    img: "https://m.media-amazon.com/images/I/61XDeaOrAoL._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "Power Bank",
+    price: 1299,
+    desc: "10000mAh",
+    img: "https://m.media-amazon.com/images/I/61G9JNd2Y4L._AC_UF1000,1000_QL80_.jpg",
+  },
+  {
+    name: "Earbuds",
+    price: 5999,
+    desc: "Wireless",
+    img: "https://m.media-amazon.com/images/I/61YTc9ocmZL._AC_UF1000,1000_QL80_.jpg",
+  },
+];
+
+const perPage = 3;
+let currentPage = 1;
+const productsDiv = document.getElementById("products");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const pageSpan = document.getElementById("page");
+
+function showProducts() {
+  const start = (currentPage - 1) * perPage;
+  const end = start + perPage;
+  const pageProducts = products.slice(start, end);
+
+  productsDiv.innerHTML = pageProducts
+    .map(
+      (product) => `
+        <div class="product">
+            <img src="${product.img}" alt="${product.name}">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p>${product.desc}</p>
+            </div>
+            <div class="price">₹${product.price.toLocaleString()}</div>
+        </div>
+    `
+    )
+    .join("");
+
+  pageSpan.textContent = `Page ${currentPage} of ${Math.ceil(
+    products.length / perPage
+  )}`;
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === Math.ceil(products.length / perPage);
+}
+
+prevBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    showProducts();
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  if (currentPage < Math.ceil(products.length / perPage)) {
+    currentPage++;
+    showProducts();
+  }
+});
+
+showProducts();

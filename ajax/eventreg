@@ -1,0 +1,173 @@
+Scriptjs
+
+function getUsers() {
+    return JSON.parse(localStorage.getItem("users") || "[]");
+  }
+  
+  function setUsers(users) {
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+  
+  function registerUser(event) {
+    event.preventDefault();
+    const user = {
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      mobile: document.getElementById("mobile").value.trim(),
+      dob: document.getElementById("dob").value,
+      city: document.getElementById("city").value.trim(),
+      address: document.getElementById("address").value.trim(),
+      username: document.getElementById("username").value.trim(),
+      password: document.getElementById("password").value
+    };
+  
+    const users = getUsers();
+    if (users.find(u => u.username === user.username)) {
+      alert("Username already exists");
+      return;
+    }
+  
+    users.push(user);
+    setUsers(users);
+  
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8000/register", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(user));
+  
+    alert("Registration successful!");
+    window.location.href = "login.html";
+  }
+  
+  function loginUser(event) {
+    event.preventDefault();
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+  
+    const users = getUsers();
+    const found = users.find(u => u.username === username && u.password === password);
+    if (found) {
+      alert("Login successful!");
+      window.location.href = "users.html";
+    } else {
+      alert("Invalid credentials");
+    }
+  }
+  
+  function displayUsers() {
+    const users = getUsers();
+    const tbody = document.getElementById("userTableBody");
+    users.forEach(user => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${user.name}</td><td>${user.email}</td>
+        <td>${user.mobile}</td><td>${user.dob}</td>
+        <td>${user.city}</td><td>${user.address}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+  
+
+  serverjs 
+
+  const express = require('express');
+const cors = require('cors');
+const path = require('path');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// Serve static files from the current directory
+app.use(express.static(path.join(__dirname)));
+
+app.post('/register', (req, res) => {
+  console.log("Received user:", req.body);
+  res.status(201).send("User received");
+});
+
+// Optional: default route for root access
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.listen(8000, () => console.log("Server running at http://localhost:8000"));
+
+
+
+indexhtml
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registration</title>
+</head>
+<body>
+  <h2>Registration Form</h2>
+  <form id="regForm" onsubmit="registerUser(event)">
+    <input type="text" id="name" placeholder="Name" required /><br />
+    <input type="email" id="email" placeholder="Email" required /><br />
+    <input type="tel" id="mobile" placeholder="Mobile No" pattern="[0-9]{10}" required />
+    <input type="date" id="dob" required /><br />
+    <input type="text" id="city" placeholder="City" required /><br />
+    <textarea id="address" placeholder="Address" required></textarea><br />
+    <input type="text" id="username" placeholder="Username" required /><br />
+    <input type="password" id="password" placeholder="Password" minlength="6" required /><br />
+    <button type="submit">Register</button>
+  </form>
+
+  <p>Already registered? <a href="login.html">Login here</a></p>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+loginhtml
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <form onsubmit="loginUser(event)">
+    <input type="text" id="login-username" placeholder="Username" required /><br />
+    <input type="password" id="login-password" placeholder="Password" required /><br />
+    <button type="submit">Login</button>
+  </form>
+
+  <p>New user? <a href="index.html">Register here</a></p>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+usershtml
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registered Users</title>
+</head>
+<body>
+  <h2>Registered Users</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Name</th><th>Email</th><th>Mobile</th><th>DOB</th><th>City</th><th>Address</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody"></tbody>
+  </table>
+
+  <script src="script.js"></script>
+  <script>
+    window.onload = displayUsers;
+  </script>
+</body>
+</html>

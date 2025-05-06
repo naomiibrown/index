@@ -1,0 +1,19 @@
+1 
+Ifconfig
+ssh pict@inet
+
+
+cat sample.txt -> doesn’t exist
+
+
+cat sample.txt
+
+
+
+
+
+
+2
+echo “Hi harsha” >> sample.txt
+cat sample.txt
+scp sample.txt pict@inet:/home/harsha

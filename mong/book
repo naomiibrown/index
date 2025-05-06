@@ -77,7 +77,7 @@ public/indexhtml
     <input type="number" name="price" placeholder="Price" required />
     <input type="text" name="genre" placeholder="Genre" required />
     <button type="submit">Add Book</button>
-  </form>https://pluto-public-assets.s3.ap-south-1.amazonaws.com/web_assets/svg/Logo_icon_light_transparent.svg
+  </form>
     <h2>Book List</h2>
   <table id="bookTable" border="1"></table>
 

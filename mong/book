@@ -1,0 +1,142 @@
+models/bookjs
+const mongoose = require('mongoose');
+
+const bookSchema = new mongoose.Schema({
+  title: String,
+  author: String,
+  price: Number,
+  genre: String
+});
+
+module.exports = mongoose.model('Book', bookSchema);
+
+
+serverjs
+
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const path = require('path');
+const Book = require('./models/book.js');
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
+
+mongoose.connect('mongodb://127.0.0.1:27017/bookstore', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
+
+// Add a new book
+app.post('/api/books', async (req, res) => {
+  const { title, author, price, genre } = req.body;
+  const book = new Book({ title, author, price, genre });
+  await book.save();
+  res.send(book);
+});
+
+// Get all books
+app.get('/api/books', async (req, res) => {
+  const books = await Book.find();
+  res.send(books);
+});
+
+// Update a book
+app.put('/api/books/:id', async (req, res) => {
+  const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.send(book);
+});
+
+// Delete a book
+app.delete('/api/books/:id', async (req, res) => {
+  await Book.findByIdAndDelete(req.params.id);
+  res.send({ message: 'Book deleted' });
+});
+
+app.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
+});
+
+
+public/indexhtml
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bookstore</title>
+</head>
+<body>
+  <h1>Books</h1>
+  <form id="bookForm">
+    <input type="text" name="title" placeholder="Title" required />
+    <input type="text" name="author" placeholder="Author" required />
+    <input type="number" name="price" placeholder="Price" required />
+    <input type="text" name="genre" placeholder="Genre" required />
+    <button type="submit">Add Book</button>
+  </form>
+    <h2>Book List</h2>
+  <table id="bookTable" border="1"></table>
+
+  <script>
+    async function loadBooks() {
+      const res = await fetch('/api/books');
+      const books = await res.json();
+      document.getElementById('bookTable').innerHTML = `
+        <tr>
+          <th>Title</th><th>Author</th><th>Price</th><th>Genre</th><th>Actions</th>
+        </tr>` + books.map(b => `
+        <tr>
+          <td>${b.title}</td><td>${b.author}</td><td>${b.price}</td><td>${b.genre}</td>
+          <td>
+            <button onclick="deleteBook('${b._id}')">Delete</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    document.getElementById('bookForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const book = {
+        title: form.title.value,
+        author: form.author.value,
+        price: form.price.value,
+        genre: form.genre.value
+      };
+      await fetch('/api/books', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(book)
+      });
+      form.reset();
+      loadBooks();
+    };
+
+    async function deleteBook(id) {
+      await fetch(`/api/books/${id}`, { method: 'DELETE' });
+      loadBooks();
+    }
+
+    window.onload = loadBooks;
+  </script>
+</body>
+</html>
+
+sudo apt update
+sudo apt install -y mongodb
+sudo systemctl start mongodb
+sudo systemctl enable mongodb 
+sudo systemctl status mongodb 
+mongosh                       
+show dbs
+sudo apt install -y nodejs
+npm install express mongoose cors
+node server.js
+
+
+mongosh
+use bookstore       # Switch to your database
+db.books.find()     # View all inserted books
